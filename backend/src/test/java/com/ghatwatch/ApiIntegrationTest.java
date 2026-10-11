@@ -103,6 +103,13 @@ class ApiIntegrationTest {
         }
         assertEquals("[]", call("GET", "/api/field-readings", null).body());
 
+        // The dev site on port 5173 sends an Origin header; POST must be allowed from it.
+        HttpResponse<String> fromDevSite = http.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/field-readings"))
+                .header("Content-Type", "application/json").header("Origin", "http://localhost:5173")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"ghatId\":\"shahpura\",\"year\":2026,\"festival\":\"Durga\",\"phase\":\"pre\",\"values\":{}}"))
+                .build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, fromDevSite.statusCode(), "a CORS rejection would be 403");
+
         HttpResponse<String> meta = call("GET", "/api/meta", null);
         assertTrue(meta.body().contains("Outdoor bathing (organised)"));
 
