@@ -6,6 +6,7 @@ import com.ghatwatch.domain.Reading;
 import com.ghatwatch.report.ReportCatalog;
 import com.ghatwatch.repository.ActionPlanRepository;
 import com.ghatwatch.repository.CpcbCriterionRepository;
+import com.ghatwatch.repository.FieldReadingRepository;
 import com.ghatwatch.repository.GhatRepository;
 import com.ghatwatch.repository.ReadingRepository;
 import com.ghatwatch.risk.BathingLimits;
@@ -46,16 +47,25 @@ public class GhatWatchService {
     private final ReadingRepository readings;
     private final CpcbCriterionRepository criteria;
     private final ActionPlanRepository plans;
+    private final FieldReadingRepository fieldReadings;
     private final LocalDate visarjanDate;
 
     public GhatWatchService(GhatRepository ghats, ReadingRepository readings, CpcbCriterionRepository criteria,
-                            ActionPlanRepository plans,
+                            ActionPlanRepository plans, FieldReadingRepository fieldReadings,
                             @Value("${ghat-watch.visarjan-date:2026-10-20}") LocalDate visarjanDate) {
         this.ghats = ghats;
         this.readings = readings;
         this.criteria = criteria;
         this.plans = plans;
+        this.fieldReadings = fieldReadings;
         this.visarjanDate = visarjanDate;
+    }
+
+    /** MPPCB report readings plus readings typed in after a visarjan. */
+    public List<Reading> allReadings() {
+        List<Reading> all = new java.util.ArrayList<>(readings.findAll());
+        fieldReadings.findAll().forEach(f -> all.add(f.toReading(Units.of(f.getParameter()))));
+        return all;
     }
 
     public BathingLimits limits() {
@@ -63,7 +73,7 @@ public class GhatWatchService {
     }
 
     public List<GhatRisk> rank(Scope scope) {
-        return new RiskEngine(limits()).rank(ghats.findAll(), readings.findAll(), scope);
+        return new RiskEngine(limits()).rank(ghats.findAll(), allReadings(), scope);
     }
 
     public RankingResponse ranking(Scope scope) {
@@ -95,11 +105,12 @@ public class GhatWatchService {
         GhatRisk risk = rank(scope).stream().filter(g -> g.ghatId().equals(ghatId)).findFirst().orElseThrow();
         BathingLimits limits = limits();
 
-        List<String> events = readings.findAll().stream()
+        List<String> events = allReadings().stream()
                 .map(RiskEngine::eventOf).filter(scope::includes).distinct().sorted()
                 .map(EventKey::label).toList();
 
-        List<ReadingView> rows = readings.findByGhatId(ghatId).stream()
+        List<ReadingView> rows = allReadings().stream()
+                .filter(r -> r.getGhatId().equals(ghatId))
                 .filter(r -> scope.includes(RiskEngine.eventOf(r)))
                 .sorted(Comparator.comparing(RiskEngine::eventOf).thenComparing(Reading::getId))
                 .map(r -> view(r, limits))
@@ -113,14 +124,14 @@ public class GhatWatchService {
         return new ReadingView(r.getId(), r.getGhatId(), r.getYear(), r.getFestival(), r.getPhase(), r.getParameter(),
                 r.getValue(), r.getValueAsPrinted(), r.getUnitAssumed(), r.getFlag(), status,
                 limits.limitText(r.getParameter()), r.getSourcePage(),
-                ReportCatalog.pdfUrl(r.getYear(), r.getSourcePage()),
-                r.getParameterAsPrinted(), r.getSiteAsPrinted());
+                r.isFieldEntry() ? null : ReportCatalog.pdfUrl(r.getYear(), r.getSourcePage()),
+                r.getParameterAsPrinted(), r.getSiteAsPrinted(), r.isFieldEntry(), r.getSourceNote());
     }
 
     /** Every reading in scope, for the analytics and evidence explorer screens. */
     public List<ReadingView> readings(Scope scope) {
         BathingLimits limits = limits();
-        return readings.findAll().stream()
+        return allReadings().stream()
                 .filter(r -> scope.includes(RiskEngine.eventOf(r)))
                 .sorted(Comparator.comparing(RiskEngine::eventOf).thenComparing(Reading::getId))
                 .map(r -> view(r, limits))
@@ -131,7 +142,7 @@ public class GhatWatchService {
     public List<YearRisk> trend(Scope scope) {
         RiskEngine engine = new RiskEngine(limits());
         List<Ghat> allGhats = ghats.findAll();
-        List<Reading> all = readings.findAll();
+        List<Reading> all = allReadings();
         return all.stream().map(Reading::getYear).distinct().sorted()
                 .map(year -> {
                     List<GhatRisk> ranked = engine.rank(allGhats, all, e -> e.year() == year && scope.includes(e));

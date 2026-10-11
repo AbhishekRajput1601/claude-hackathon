@@ -62,8 +62,10 @@ export function TrendChart({ readings, events, parameter }: { readings: ReadingV
         phase: p.phase,
         value: p.reading ? p.reading.valueAsPrinted || '–' : '–',
         status: p.reading ? <StatusBadge status={p.reading.status} /> : <StatusBadge status="MISSING" />,
-        page: p.reading ? (
-          <a className="text-brand-700 underline" href={p.reading.pdfUrl} target="_blank" rel="noreferrer">
+        page: p.reading && !p.reading.pdfUrl ? (
+          t('enteredHere')
+        ) : p.reading ? (
+          <a className="text-brand-700 underline" href={p.reading.pdfUrl ?? undefined} target="_blank" rel="noreferrer">
             {t('page')}
             {p.reading.sourcePage}
           </a>

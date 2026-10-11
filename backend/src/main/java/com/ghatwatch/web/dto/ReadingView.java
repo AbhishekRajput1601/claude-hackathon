@@ -8,5 +8,6 @@ import java.math.BigDecimal;
 public record ReadingView(Long id, String ghatId, int year, String festival, String phase, String parameter,
                           BigDecimal value, String valueAsPrinted, String unit, String flag,
                           ReadingStatus status, String limit, int sourcePage, String pdfUrl,
-                          String parameterAsPrinted, String siteAsPrinted) {
+                          String parameterAsPrinted, String siteAsPrinted, boolean fieldEntry,
+                          String sourceNote) {
 }

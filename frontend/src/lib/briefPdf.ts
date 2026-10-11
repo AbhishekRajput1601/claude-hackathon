@@ -107,3 +107,19 @@ export function downloadBlob(blob: Blob, filename: string) {
   a.remove()
   setTimeout(() => URL.revokeObjectURL(url), 10_000)
 }
+
+/**
+ * Hands a PDF to the phone or Windows share menu (WhatsApp appears there when installed).
+ * Where a browser cannot share files, the PDF is downloaded and WhatsApp opens so it can be attached.
+ * Throws AbortError if the officer closes the share menu.
+ */
+export async function sharePdf(blob: Blob, fileName: string, message: string): Promise<'shared' | 'downloaded'> {
+  const file = new File([blob], fileName, { type: 'application/pdf' })
+  if (navigator.canShare?.({ files: [file] })) {
+    await navigator.share({ files: [file], title: fileName.replace(/\.pdf$/, ''), text: message })
+    return 'shared'
+  }
+  downloadBlob(blob, fileName)
+  window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener')
+  return 'downloaded'
+}

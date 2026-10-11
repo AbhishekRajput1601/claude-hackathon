@@ -16,7 +16,9 @@ export interface ReadingRef {
   valueAsPrinted: string
   unit: string | null
   sourcePage: number
-  pdfUrl: string
+  /** Null for readings typed into Ghat Watch: they have no report page. */
+  pdfUrl: string | null
+  fieldEntry: boolean
 }
 
 export interface ParameterSummary {
@@ -117,9 +119,11 @@ export interface ReadingView {
   status: ReadingStatus
   limit: string
   sourcePage: number
-  pdfUrl: string
+  pdfUrl: string | null
   parameterAsPrinted: string
   siteAsPrinted: string
+  fieldEntry: boolean
+  sourceNote: string | null
 }
 
 export interface PlanView {
@@ -187,4 +191,28 @@ export interface YearRisk {
   /** Ghats with no key reading that year; they sit in no tier. */
   untested: number
   ghats: { ghatId: string; name: string; nameHi: string; score: number; tier: Tier; tested: boolean }[]
+}
+
+/** A reading typed into Ghat Watch after a visarjan. */
+export interface FieldReading {
+  id: number
+  ghatId: string
+  year: number
+  festival: string
+  phase: string
+  parameter: string
+  value: number | null
+  flag: string | null
+  valueAsEntered: string
+  sourceNote: string | null
+  enteredAt: string
+}
+
+export interface FieldReadingRequest {
+  ghatId: string
+  year: number
+  festival: string
+  phase: string
+  sourceNote: string | null
+  values: Record<string, string>
 }

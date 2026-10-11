@@ -2,7 +2,9 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboa
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import {
   BarChart3,
+  CalendarCheck,
   CalendarDays,
+  ClipboardPlus,
   ChevronDown,
   FileSearch,
   FileText,
@@ -33,6 +35,8 @@ const NAV: { to: string; label: StringKey; Icon: typeof Home; end?: boolean }[] 
   { to: '/app/analytics', label: 'navAnalytics', Icon: BarChart3 },
   { to: '/app/evidence', label: 'navEvidence', Icon: FileSearch },
   { to: '/app/brief', label: 'navBrief', Icon: FileText },
+  { to: '/app/schedule', label: 'navSchedule', Icon: CalendarCheck },
+  { to: '/app/readings', label: 'navReadings', Icon: ClipboardPlus },
 ]
 
 export function Logo({ dark = false, tagline = false, emblem = false }: { dark?: boolean; tagline?: boolean; emblem?: boolean }) {
@@ -65,7 +69,7 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useApp()
   const days = daysToVisarjan()
   return (
-    <div className="flex h-full flex-col bg-linear-to-b from-ink-900 to-ink-950 px-4 py-6">
+    <div className="scroll-thin flex h-full flex-col overflow-y-auto bg-linear-to-b from-ink-900 to-ink-950 px-4 py-6">
       <div className="px-1">
         <Logo dark emblem />
       </div>

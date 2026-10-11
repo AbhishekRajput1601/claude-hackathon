@@ -1,4 +1,16 @@
-import type { BriefResponse, GhatDetail, Meta, PlanRequest, PlanView, RankingResponse, ReadingView, Scope, YearRisk } from './types'
+import type {
+  BriefResponse,
+  FieldReading,
+  FieldReadingRequest,
+  GhatDetail,
+  Meta,
+  PlanRequest,
+  PlanView,
+  RankingResponse,
+  ReadingView,
+  Scope,
+  YearRisk,
+} from './types'
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
@@ -31,5 +43,9 @@ export const api = {
   savePlan: (id: string, body: PlanRequest) =>
     request<PlanView>(`/api/plan/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   clearPlan: (id: string) => request<void>(`/api/plan/${id}`, { method: 'DELETE' }),
+  fieldReadings: () => request<FieldReading[]>('/api/field-readings'),
+  saveFieldReadings: (body: FieldReadingRequest) =>
+    request<FieldReading[]>('/api/field-readings', { method: 'POST', body: JSON.stringify(body) }),
+  deleteFieldReading: (id: number) => request<void>(`/api/field-readings/${id}`, { method: 'DELETE' }),
   rankingCsvUrl: (scope: Scope) => `/api/ranking.csv?${scopeParam(scope)}`,
 }

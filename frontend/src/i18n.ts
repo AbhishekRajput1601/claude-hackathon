@@ -290,6 +290,68 @@ const strings = {
   limitations: { en: 'What this data does not cover', hi: 'ये आँकड़े क्या नहीं बताते' },
   cpcbTable: { en: 'CPCB standards (all classes)', hi: 'CPCB मानक (सभी श्रेणियाँ)' },
 
+  enteredHere: { en: 'Entered in Ghat Watch', hi: 'घाट वॉच में दर्ज' },
+  enteredHereHelp: {
+    en: 'This reading was typed in after the visarjan, so it has no MPPCB report page. Check it against the lab sheet named in the source note.',
+    hi: 'यह जाँच विसर्जन के बाद यहाँ दर्ज की गई है, इसलिए इसका MPPCB रिपोर्ट पृष्ठ नहीं है। स्रोत टिप्पणी में बताई लैब शीट से इसे मिलाएँ।',
+  },
+  sourceNote: { en: 'Source', hi: 'स्रोत' },
+
+  // New readings
+  navReadings: { en: 'New readings', hi: 'नई जाँचें' },
+  readingsTitle: { en: 'Add this visarjan’s readings', hi: 'इस विसर्जन की जाँचें जोड़ें' },
+  readingsSub: {
+    en: 'Type in MPPCB’s new results (e.g. Durga 2026). The ranking, brief and trends update at once.',
+    hi: 'MPPCB के नए परिणाम दर्ज करें (जैसे दुर्गा 2026)। रैंकिंग, ब्रीफ़ और रुझान तुरंत बदल जाते हैं।',
+  },
+  readingsHelp: {
+    en: 'Leave a box empty if it was not tested. Write BDL or ND for below detection. Readings already in an MPPCB report cannot be changed here.',
+    hi: 'जिसकी जाँच नहीं हुई उसका खाना खाली छोड़ें। पता लगाने की सीमा से नीचे के लिए BDL या ND लिखें। MPPCB रिपोर्ट में पहले से मौजूद जाँच यहाँ नहीं बदली जा सकती।',
+  },
+  sourceNotePlaceholder: { en: 'Source, e.g. MPPCB lab sheet, 20 Oct 2026', hi: 'स्रोत, जैसे MPPCB लैब शीट, 20 अक्टूबर 2026' },
+  saveReadings: { en: 'Save readings', hi: 'जाँचें सहेजें' },
+  savedReadings: { en: '{n} readings saved. The ranking now includes them.', hi: '{n} जाँचें सहेजी गईं। रैंकिंग में अब ये शामिल हैं।' },
+  enteredList: { en: 'Readings entered here', hi: 'यहाँ दर्ज जाँचें' },
+  noneEntered: { en: 'Nothing entered yet.', hi: 'अभी कुछ दर्ज नहीं।' },
+  remove: { en: 'Remove', hi: 'हटाएँ' },
+  enteredOn: { en: 'Entered', hi: 'दर्ज' },
+
+  // Schedule and field sheets
+  navSchedule: { en: 'Test schedule', hi: 'जाँच कार्यक्रम' },
+  scheduleTitle: { en: 'Visarjan testing schedule', hi: 'विसर्जन जाँच कार्यक्रम' },
+  scheduleSub: {
+    en: 'Three water tests per ghat — before, during and one week after Durga visarjan. Ghats with missing data come first.',
+    hi: 'हर घाट पर तीन जल-जाँच — दुर्गा विसर्जन से पहले, दौरान और एक सप्ताह बाद। जिन घाटों के आँकड़े अधूरे हैं वे पहले।',
+  },
+  addToCalendar: { en: 'Add to calendar', hi: 'कैलेंडर में जोड़ें' },
+  fieldSheets: { en: 'Field sheets (PDF)', hi: 'फ़ील्ड शीट (PDF)' },
+  fieldSheet: { en: 'Field sheet', hi: 'फ़ील्ड शीट' },
+  priority: { en: 'Priority', hi: 'प्राथमिकता' },
+  whyFirst: { en: 'Why', hi: 'क्यों' },
+  testBefore: { en: 'Before', hi: 'पहले' },
+  testDuring: { en: 'During', hi: 'दौरान' },
+  testAfter: { en: '1 week after', hi: '1 सप्ताह बाद' },
+  reasonGap: { en: 'Data gaps: {list}', hi: 'आँकड़ों की कमी: {list}' },
+  reasonSite: { en: 'Record the exact sampling point', hi: 'नमूने की सही जगह दर्ज करें' },
+  reasonRisk: { en: '{tier} risk — confirm this year’s condition', hi: '{tier} जोखिम — इस साल की स्थिति की पुष्टि करें' },
+  coliformTip: {
+    en: 'Also ask MPPCB to test total coliform. It is part of the CPCB bathing standard but missing from all three reports.',
+    hi: 'MPPCB से टोटल कोलीफॉर्म की जाँच भी कराएँ। यह CPCB स्नान-जल मानक का हिस्सा है, पर तीनों रिपोर्टों में नहीं है।',
+  },
+  scheduleDatesNote: {
+    en: 'Suggested dates: two days before, on the day, and one week after, matching the MPPCB pattern. Change them in the calendar if needed.',
+    hi: 'सुझाई गई तिथियाँ: दो दिन पहले, उसी दिन, और एक सप्ताह बाद — MPPCB के तरीके के अनुसार। ज़रूरत हो तो कैलेंडर में बदलें।',
+  },
+
+  // Year-on-year
+  worse: { en: 'Worse than {year}', hi: '{year} से खराब' },
+  better: { en: 'Better than {year}', hi: '{year} से बेहतर' },
+  similar: { en: 'Similar to {year}', hi: '{year} जैसा' },
+  changeHelp: {
+    en: 'Risk score in {to} compared with {from}, each year scored on its own readings.',
+    hi: '{to} का जोखिम स्कोर {from} से तुलना में, हर साल उसी साल की जाँच से।',
+  },
+
   loading: { en: 'Loading…', hi: 'लोड हो रहा है…' },
   errorTitle: { en: 'Could not reach the Ghat Watch server', hi: 'घाट वॉच सर्वर से संपर्क नहीं हो सका' },
   errorHelp: {

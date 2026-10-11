@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.math.BigDecimal;
 
@@ -59,6 +60,13 @@ public class Reading {
     @Column(name = "source_page")
     private int sourcePage;
 
+    /** True for readings typed into Ghat Watch; they have no report page. */
+    @Transient
+    private boolean fieldEntry;
+
+    @Transient
+    private String sourceNote;
+
     protected Reading() {
     }
 
@@ -79,6 +87,16 @@ public class Reading {
         this.siteAsPrinted = siteAsPrinted;
         this.siteMatchConfidence = siteMatchConfidence;
         this.sourcePage = sourcePage;
+    }
+
+    static Reading fieldEntry(long id, String ghatId, int year, String festival, String phase, String parameter,
+                              BigDecimal value, String unit, String flag, String valueAsEntered, String sourceNote) {
+        Reading r = new Reading(ghatId, year, festival, phase, parameter, value, unit, flag, valueAsEntered,
+                parameter, null, "high", 0);
+        r.id = id;
+        r.fieldEntry = true;
+        r.sourceNote = sourceNote;
+        return r;
     }
 
     /** BDL / ND: tested, and very low. Not zero and not missing. */
@@ -105,4 +123,6 @@ public class Reading {
     public String getSiteAsPrinted() { return siteAsPrinted; }
     public String getSiteMatchConfidence() { return siteMatchConfidence; }
     public int getSourcePage() { return sourcePage; }
+    public boolean isFieldEntry() { return fieldEntry; }
+    public String getSourceNote() { return sourceNote; }
 }

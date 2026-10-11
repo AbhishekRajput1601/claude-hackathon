@@ -51,3 +51,21 @@ CREATE TABLE IF NOT EXISTS action_plan (
     updated_at    DATETIME(0)  NOT NULL,
     CONSTRAINT fk_plan_ghat FOREIGN KEY (ghat_id) REFERENCES ghat (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+-- Readings typed in after a visarjan (e.g. from the MPPCB lab sheet for Durga 2026).
+-- Kept apart from the report readings and always shown as "entered in Ghat Watch".
+CREATE TABLE IF NOT EXISTS field_reading (
+    id                    BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ghat_id               VARCHAR(40)   NOT NULL,
+    report_year           INT           NOT NULL,
+    festival              VARCHAR(10)   NOT NULL,
+    phase                 VARCHAR(10)   NOT NULL,
+    parameter             VARCHAR(40)   NOT NULL,
+    value                 DECIMAL(12, 4),
+    flag                  VARCHAR(20),
+    value_as_entered      VARCHAR(40)   NOT NULL,
+    source_note           VARCHAR(300),
+    entered_at            DATETIME(0)   NOT NULL,
+    CONSTRAINT fk_field_reading_ghat FOREIGN KEY (ghat_id) REFERENCES ghat (id),
+    CONSTRAINT uq_field_reading UNIQUE (ghat_id, report_year, festival, phase, parameter)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

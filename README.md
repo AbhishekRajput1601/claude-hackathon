@@ -78,6 +78,13 @@ The code is in [backend/src/main/java/com/ghatwatch/risk/RiskEngine.java](backen
 - Water analytics: ghat comparison, year-wise trend, and Ganesh vs Durga for any parameter. Every chart has a table view, and averages leave out BDL and not-sampled readings.
 - Evidence explorer: filter all 1,524 readings, then open the exact report page in a PDF preview next to the table.
 - Map of the 7 ghats coloured by risk tier (positions approximate, see below).
+- **Visarjan test schedule:** before (18 Oct), during (20 Oct) and one week after (27 Oct) for every ghat, with ghats that have data gaps first. It downloads as a calendar file (.ics), and the page suggests asking MPPCB to add total coliform.
+- **Field sheets:** one A4 page per ghat for the ground team. Each has the risk and reasons, action tick boxes, the bathing limits, last year's results, and blank boxes for this year's readings. They download or share on WhatsApp as one PDF, or one ghat at a time.
+- **New readings:** this visarjan's MPPCB results (e.g. Durga 2026) can be typed in, and the ranking, brief and trends update at once.
+  - Typed-in readings are marked "Entered in Ghat Watch" with their source note, never shown as a report page.
+  - A cell already printed in an MPPCB report cannot be overwritten.
+  - Until a ghat's results are entered, the new festival shows as a data gap for that ghat.
+- **Better or worse than last year:** an arrow on each ghat compares its latest tested year's risk score with the year before.
 - A Settings & about page with the method, the data limits, the sources and all CPCB classes. The layout works on phones, with the sidebar becoming a menu.
 
 **Doesn't, or not yet**

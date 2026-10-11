@@ -170,6 +170,21 @@ export function StatusBadge({ status }: { status: ReadingStatus }) {
 export function SourceChip({ source, showValue = true }: { source: ReadingRef; showValue?: boolean }) {
   const { t, lang } = useApp()
   const unit = source.parameter === 'pH' ? '' : ` ${source.unit ?? ''}`
+  if (!source.pdfUrl) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-md bg-violet-50 px-1.5 py-0.5 text-[11px] text-violet-800 ring-1 ring-violet-200 ring-inset">
+        {showValue && (
+          <span className="font-semibold">
+            {source.valueAsPrinted}
+            {unit}
+          </span>
+        )}
+        <span>
+          {festivalLabel(source.festival, source.year, lang)} · {t(source.phase as 'pre' | 'during' | 'after')} · {t('enteredHere')}
+        </span>
+      </span>
+    )
+  }
   return (
     <a
       href={source.pdfUrl}

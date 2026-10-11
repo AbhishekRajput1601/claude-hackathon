@@ -2,17 +2,19 @@ import { Link } from 'react-router'
 import { Line, LineChart, ReferenceLine, ResponsiveContainer, YAxis } from 'recharts'
 import { ChevronRight, Download, MapPinned } from 'lucide-react'
 import { api } from '../api'
+import { ChangeBadge, yearChange } from '../components/ChangeBadge'
 import { ActionChip, Card, ErrorBox, GhatThumb, Loading, PageHeader, TierBadge, tierRank, tierText } from '../components/ui'
 import { INK, STATUS, TIER_COLOR } from '../lib/chartTheme'
 import { PHASES, fmt } from '../lib/ghats'
 import { cached, useApp, useLoad } from '../state'
-import type { GhatRisk, PlanView, RankingResponse, ReadingView } from '../types'
+import type { GhatRisk, PlanView, RankingResponse, ReadingView, YearRisk } from '../types'
 
 export function RankingsPage() {
   const { t, scope } = useApp()
   const ranking = useLoad(() => cached<RankingResponse>(`ranking:${scope}`, () => api.ranking(scope)), [scope])
   const readings = useLoad(() => cached<ReadingView[]>(`readings:${scope}`, () => api.readings(scope)), [scope])
   const plans = useLoad(() => api.plans(), [])
+  const trend = useLoad(() => cached<YearRisk[]>(`trend:${scope}`, () => api.trend(scope)), [scope])
 
   if (ranking.error ?? readings.error) return <ErrorBox message={(ranking.error ?? readings.error)!} onRetry={ranking.reload} />
   if (!ranking.data || !readings.data) return <Loading />
@@ -42,7 +44,12 @@ export function RankingsPage() {
         <ol className="divide-y divide-slate-100">
           {ranking.data.ghats.map((g) => (
             <li key={g.ghatId}>
-              <RankRow ghat={g} readings={readings.data!.filter((r) => r.ghatId === g.ghatId)} plan={plans.data?.[g.ghatId]} />
+              <RankRow
+                ghat={g}
+                readings={readings.data!.filter((r) => r.ghatId === g.ghatId)}
+                plan={plans.data?.[g.ghatId]}
+                change={yearChange(trend.data, g.ghatId)}
+              />
             </li>
           ))}
         </ol>
@@ -51,7 +58,17 @@ export function RankingsPage() {
   )
 }
 
-function RankRow({ ghat, readings, plan }: { ghat: GhatRisk; readings: ReadingView[]; plan: PlanView | undefined }) {
+function RankRow({
+  ghat,
+  readings,
+  plan,
+  change,
+}: {
+  ghat: GhatRisk
+  readings: ReadingView[]
+  plan: PlanView | undefined
+  change: ReturnType<typeof yearChange>
+}) {
   const { t, pick } = useApp()
   const tested = readings.filter((r) => r.status !== 'MISSING').length
   const gaps = ghat.coverage.gaps.length
@@ -87,6 +104,7 @@ function RankRow({ ghat, readings, plan }: { ghat: GhatRisk; readings: ReadingVi
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[15px] font-semibold text-ink-900 group-hover:text-brand-800">{pick(ghat.name, ghat.nameHi)}</span>
             <TierBadge tier={ghat.tier} label={ghat.tierLabel} labelHi={ghat.tierLabelHi} />
+            <ChangeBadge change={change} />
             {ghat.siteMatchConfidence !== 'high' && (
               <span className="rounded-md bg-amber-50 px-1.5 py-0.5 text-[11px] font-semibold text-amber-800 ring-1 ring-amber-200">
                 {t('siteUncertain')}

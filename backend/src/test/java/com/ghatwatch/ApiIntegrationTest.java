@@ -79,6 +79,30 @@ class ApiIntegrationTest {
         // Bairagarh and Malikhedi have no Durga 2025 table, but Ganesh 2025 was tested, so none untested.
         assertTrue(call("GET", "/api/trend?scope=durga", null).body().contains("\"untested\":2"));
 
+        // Readings typed in after this visarjan feed the ranking, the detail page and the trend.
+        HttpResponse<String> entered = call("POST", "/api/field-readings",
+                "{\"ghatId\":\"shahpura\",\"year\":2026,\"festival\":\"Durga\",\"phase\":\"during\","
+                        + "\"sourceNote\":\"MPPCB lab sheet\",\"values\":{\"Dissolved oxygen\":\"1.2\",\"Lead\":\"BDL\",\"BOD\":\"\"}}");
+        assertEquals(200, entered.statusCode(), entered.body());
+        assertTrue(entered.body().contains("\"valueAsEntered\":\"1.2\""));
+        HttpResponse<String> shahpura = call("GET", "/api/ghats/shahpura", null);
+        assertTrue(shahpura.body().contains("Durga 2026"));
+        assertTrue(shahpura.body().contains("\"fieldEntry\":true"));
+        assertTrue(call("GET", "/api/trend", null).body().contains("\"year\":2026"));
+        assertEquals(400, call("POST", "/api/field-readings",
+                "{\"ghatId\":\"shahpura\",\"year\":2026,\"festival\":\"Durga\",\"phase\":\"pre\",\"values\":{\"BOD\":\"high\"}}").statusCode());
+        HttpResponse<String> clash = call("POST", "/api/field-readings",
+                "{\"ghatId\":\"shahpura\",\"year\":2025,\"festival\":\"Durga\",\"phase\":\"pre\",\"values\":{\"BOD\":\"1\"}}");
+        assertEquals(400, clash.statusCode());
+        assertTrue(clash.body().contains("already in the MPPCB report"));
+        HttpResponse<String> list = call("GET", "/api/field-readings", null);
+        for (String id : list.body().split("\"id\":")) {
+            if (Character.isDigit(id.charAt(0))) {
+                assertEquals(204, call("DELETE", "/api/field-readings/" + id.substring(0, id.indexOf(',')), null).statusCode());
+            }
+        }
+        assertEquals("[]", call("GET", "/api/field-readings", null).body());
+
         HttpResponse<String> meta = call("GET", "/api/meta", null);
         assertTrue(meta.body().contains("Outdoor bathing (organised)"));
 

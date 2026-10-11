@@ -128,6 +128,9 @@ export function EvidencePage() {
                           <StatusBadge status={r.status} />
                         </td>
                         <td className="px-4 py-2.5 whitespace-nowrap">
+                          {!r.pdfUrl ? (
+                            <span className="text-xs font-medium text-violet-700">{t('enteredHere')}</span>
+                          ) : (
                           <a
                             href={r.pdfUrl}
                             target="_blank"
@@ -138,6 +141,7 @@ export function EvidencePage() {
                             {r.year} {t('page')}
                             {r.sourcePage} <ExternalLink className="size-3.5" />
                           </a>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -181,7 +185,17 @@ export function EvidencePage() {
             <h3 className="text-sm font-semibold">{t('pdfPreview')}</h3>
             {selected && <StatusBadge status={selected.status} />}
           </div>
-          {selected ? (
+          {selected && !selected.pdfUrl ? (
+            <div className="space-y-2 px-5 py-6 text-sm text-slate-700">
+              <p className="font-semibold text-violet-800">{t('enteredHere')}</p>
+              <p>{t('enteredHereHelp')}</p>
+              {selected.sourceNote && (
+                <p className="text-xs text-slate-500">
+                  {t('sourceNote')}: {selected.sourceNote}
+                </p>
+              )}
+            </div>
+          ) : selected && selected.pdfUrl ? (
             <div>
               <div className="space-y-1 px-5 py-3 text-xs text-slate-600">
                 <div className="font-semibold text-slate-900">

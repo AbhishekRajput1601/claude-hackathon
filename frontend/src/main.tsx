@@ -20,6 +20,8 @@ import { AnalyticsPage } from './pages/AnalyticsPage'
 import { EvidencePage } from './pages/EvidencePage'
 import { BriefPage } from './pages/BriefPage'
 import { AboutPage } from './pages/AboutPage'
+import { ReadingsPage } from './pages/ReadingsPage'
+import { SchedulePage } from './pages/SchedulePage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,6 +37,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="evidence" element={<EvidencePage />} />
             <Route path="brief" element={<BriefPage />} />
+            <Route path="schedule" element={<SchedulePage />} />
+            <Route path="readings" element={<ReadingsPage />} />
             <Route path="about" element={<AboutPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

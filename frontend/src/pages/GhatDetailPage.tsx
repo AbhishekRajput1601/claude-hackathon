@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { ArrowLeft, ArrowRight, Beaker, Droplet, FlaskConical, Hash, MapPin, ShieldCheck, Waves } from 'lucide-react'
 import { api } from '../api'
+import { ChangeBadge, yearChange } from '../components/ChangeBadge'
 import { PlanEditor } from '../components/PlanEditor'
 import { ReasonList } from '../components/Reasons'
 import { TrendChart } from '../components/TrendChart'
@@ -22,8 +23,8 @@ import {
   type Tone,
 } from '../components/ui'
 import { CLASS_B, PARAMETERS, PHASES, festivalLabel, fmt } from '../lib/ghats'
-import { useApp, useLoad } from '../state'
-import type { GhatDetail, ReadingStatus, ReadingView } from '../types'
+import { cached, useApp, useLoad } from '../state'
+import type { GhatDetail, ReadingStatus, ReadingView, YearRisk } from '../types'
 
 type Tab = 'overview' | 'parameters' | 'trends' | 'evidence' | 'recommendations'
 
@@ -44,6 +45,7 @@ export function GhatDetailPage() {
   const { ghatId = '' } = useParams()
   const { scope, t, pick, lang } = useApp()
   const detail = useLoad(() => api.ghat(ghatId, scope), [ghatId, scope])
+  const trend = useLoad(() => cached<YearRisk[]>(`trend:${scope}`, () => api.trend(scope)), [scope])
   const [tab, setTab] = useState<Tab>('overview')
 
   if (detail.error) return <ErrorBox message={detail.error} onRetry={detail.reload} />
@@ -68,6 +70,7 @@ export function GhatDetailPage() {
                 {fmt(risk.score, 1)}
                 <span className="text-sm font-medium text-slate-400">/100</span>
               </span>
+              <ChangeBadge change={yearChange(trend.data, risk.ghatId)} />
             </div>
             <p className="mt-0.5 text-sm text-slate-500">{lang === 'hi' ? risk.name : risk.nameHi}</p>
             <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600">
@@ -229,6 +232,16 @@ function Cell({ reading, compact = false }: { reading: ReadingView | undefined; 
       : reading.status === 'BELOW_DETECTION'
         ? reading.flag ?? 'BDL'
         : reading.valueAsPrinted
+  if (!reading.pdfUrl) {
+    return (
+      <span
+        title={`${t('enteredHere')}${reading.sourceNote ? ` · ${reading.sourceNote}` : ''}`}
+        className={`block rounded px-1 py-1 text-center tabular-nums ring-2 ring-violet-300 ring-inset ${cellStyle[reading.status]}`}
+      >
+        {label}
+      </span>
+    )
+  }
   return (
     <a
       href={reading.pdfUrl}

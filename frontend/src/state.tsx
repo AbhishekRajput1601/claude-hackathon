@@ -44,6 +44,11 @@ export function useApp(): AppState {
 // The readings never change while the app runs, so their requests are shared between screens.
 const cache = new Map<string, Promise<unknown>>()
 
+/** Forget cached readings and rankings, e.g. after new readings are typed in. */
+export function clearCache() {
+  cache.clear()
+}
+
 export function cached<T>(key: string, load: () => Promise<T>): Promise<T> {
   if (!cache.has(key)) {
     const promise = load().catch((e) => {
