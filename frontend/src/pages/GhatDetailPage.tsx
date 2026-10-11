@@ -59,7 +59,7 @@ export function GhatDetailPage() {
 
       <Card className="p-6">
         <div className="flex flex-wrap items-start gap-5">
-          <GhatThumb waterBody={risk.waterBody} size="lg" />
+          <GhatThumb ghatId={risk.ghatId} waterBody={risk.waterBody} size="xl" />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-2xl font-bold tracking-tight">{pick(risk.name, risk.nameHi)}</h1>

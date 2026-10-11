@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   AlertCircle,
   AlertTriangle,
@@ -316,11 +316,35 @@ const waterTones: Record<string, [string, string, string]> = {
   'Shahpura Lake': ['#7a4a1d', '#d5a066', '#f7c48e'],
 }
 
-/** A small dusk-over-water illustration standing in for a photo, toned by the water body. */
-export function GhatThumb({ waterBody, size = 'md' }: { waterBody: string; size?: 'sm' | 'md' | 'lg' }) {
+/** Ghats with a picture in public/images/ghats/. */
+const GHAT_IMAGES = new Set(['bairagarh', 'khatlapura', 'prempura', 'rani-kamlapati', 'hathaikheda', 'malikhedi', 'shahpura'])
+
+const thumbDims = { sm: 'h-10 w-14', md: 'h-14 w-20', lg: 'h-24 w-36', xl: 'h-28 w-44 sm:h-32 sm:w-52' } as const
+
+/**
+ * The ghat's picture, or a drawn dusk-over-water scene toned by its water body when there is none
+ * (or the file fails to load).
+ */
+export function GhatThumb({ ghatId, waterBody, size = 'md' }: { ghatId?: string; waterBody: string; size?: keyof typeof thumbDims }) {
+  const [failed, setFailed] = useState(false)
+  if (ghatId && GHAT_IMAGES.has(ghatId) && !failed) {
+    return (
+      <img
+        src={`/images/ghats/${ghatId}.jpg`}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        onError={() => setFailed(true)}
+        className={`${thumbDims[size]} shrink-0 rounded-xl object-cover shadow-sm ring-1 ring-black/5`}
+      />
+    )
+  }
+  return <GhatIllustration waterBody={waterBody} dims={thumbDims[size]} />
+}
+
+function GhatIllustration({ waterBody, dims }: { waterBody: string; dims: string }) {
   const [deep, light, sky] = waterTones[waterBody] ?? ['#334155', '#94a3b8', '#e2c8a8']
   const id = deep.slice(1)
-  const dims = size === 'sm' ? 'h-10 w-14' : size === 'lg' ? 'h-24 w-36' : 'h-14 w-20'
   return (
     <svg viewBox="0 0 80 56" className={`${dims} shrink-0 rounded-xl ring-1 ring-black/5`} aria-hidden>
       <defs>

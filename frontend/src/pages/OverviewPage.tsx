@@ -186,7 +186,7 @@ export function OverviewPage() {
               to={`/app/ghat/${g.ghatId}`}
               className="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lift"
             >
-              <GhatThumb waterBody={g.waterBody} />
+              <GhatThumb ghatId={g.ghatId} waterBody={g.waterBody} />
               <div className="min-w-0 flex-1">
                 <div className="truncate font-semibold text-ink-900">
                   <span className="text-slate-400">#{g.rank}</span> {pick(g.name, g.nameHi)}

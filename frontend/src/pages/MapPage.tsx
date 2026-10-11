@@ -112,7 +112,7 @@ export function MapPage() {
                 ))}
               </div>
               <div className="pointer-events-auto flex max-w-sm items-center gap-3 rounded-xl bg-white/95 p-2.5 pr-3 shadow-lg ring-1 ring-slate-200">
-                <GhatThumb waterBody={selected.waterBody} size="sm" />
+                <GhatThumb ghatId={selected.ghatId} waterBody={selected.waterBody} size="sm" />
                 <div className="min-w-0">
                   <div className="truncate text-sm font-semibold">{pick(selected.name, selected.nameHi)}</div>
                   <div className="mt-0.5 flex items-center gap-2">
@@ -131,7 +131,7 @@ export function MapPage() {
         <div className="space-y-4">
           <Card className="p-5">
             <div className="flex items-center gap-3">
-              <GhatThumb waterBody={selected.waterBody} />
+              <GhatThumb ghatId={selected.ghatId} waterBody={selected.waterBody} />
               <div className="min-w-0">
                 <div className="font-semibold">
                   <span className="text-slate-400">#{selected.rank}</span> {pick(selected.name, selected.nameHi)}

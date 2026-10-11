@@ -82,7 +82,7 @@ function RankRow({ ghat, readings, plan }: { ghat: GhatRisk; readings: ReadingVi
         <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${tierRank[ghat.tier]}`}>
           {ghat.rank}
         </span>
-        <GhatThumb waterBody={ghat.waterBody} />
+        <GhatThumb ghatId={ghat.ghatId} waterBody={ghat.waterBody} />
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[15px] font-semibold text-ink-900 group-hover:text-brand-800">{pick(ghat.name, ghat.nameHi)}</span>
