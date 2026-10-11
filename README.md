@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Team** | _TEAM NAME_ |
-| **Members** | Abhishek Rajput · Milendra Kumar Baghel · Tanisha Borala · Krishna Malviya · Srijanya Tiwari |
+| **Members** | Abhishek Rajput · Milendra Kumar Baghel · Tanisha Borana · Krishna Malviya · Srijanya Tiwari |
 | **The one user** | The Bhopal Municipal Corporation officer who plans Durga visarjan at the ghats and decides where to send extra cleaning, aeration and water testing |
 | **The one outcome** | Before 20 October 2026: a ranked list of the 7 Bhopal ghats, a reason for each rank traced to the report page, a saved action plan, and a short Hindi + English brief to forward |
 
